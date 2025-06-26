@@ -100,7 +100,7 @@ def main(args):
         # Sample images:
         with torch.no_grad():
             for t, r in zip(t_r[:-1], t_r[1:]):
-                z = z - model(z, t, r, **model_kwargs)
+                z = z - model(z, t, r, **model_kwargs) * (t - r).reshape(-1, 1, 1, 1)
             samples = vae.decode(z / 0.18215).sample
         samples = torch.clamp(127.5 * samples + 128.0, 0, 255).permute(0, 2, 3, 1).to("cpu", dtype=torch.uint8).numpy()
 
