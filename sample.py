@@ -72,7 +72,6 @@ def main(args):
     if rank == 0:
         os.makedirs(sample_folder_dir, exist_ok=True)
         print(f"Saving .png samples at {sample_folder_dir}")
-    dist.barrier()
 
     # Figure out how many samples we need to generate on each GPU and how many iterations we need to run:
     n = args.per_proc_batch_size
@@ -110,7 +109,7 @@ def main(args):
             Image.fromarray(sample).save(f"{sample_folder_dir}/{index:06d}.png")
         total += global_batch_size
 
-    dist.barrier()
+    dist.barrier(device_ids=[device])
     dist.destroy_process_group()
 
 
