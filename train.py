@@ -210,7 +210,7 @@ def main(args):
                     # Map input images to latent space + normalize latents:
                     x = vae.encode(x).latent_dist.sample().mul_(0.18215)
             t = torch.randn((2, b), device=device)
-            t = torch.where(torch.randn((1, b), device=device) < args.rate_same, t, t[:1].repeat(2, 1))
+            t = torch.where(torch.rand((1, b), device=device) < args.rate_same, t, t[:1].repeat(2, 1))
             r, t = t.mul(args.p_std).add(args.p_mean).sigmoid().msort().unbind()
             model_kwargs = dict(y=y)
             def wrapper():
